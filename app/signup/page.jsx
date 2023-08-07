@@ -3,9 +3,11 @@ import Link from "next/link"
 import axios from "axios"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { signIn, useSession } from "next-auth/react"
+
 
 export default function Signup(){
-
+    const { data: session } = useSession();
     const router = useRouter();
 
     const [state, setState] = useState({
@@ -16,7 +18,7 @@ export default function Signup(){
         password: ""
     });
 
-    const [error, setError] = useState({});
+    const [error, setError] = useState([]);
 
     const inputHandler = (e) => {
         setState({...state, [e.target.name]: e.target.value})
@@ -27,6 +29,7 @@ export default function Signup(){
         phoneNumber = phoneNumber.replace(/\D/g, ""); 
         phoneNumber = phoneNumber.substring(0, 10);
         setState({ ...state, phoneNumber });
+        console.log(state.phoneNumber);
       };
 
     function handleSubmit(e){
@@ -37,16 +40,18 @@ export default function Signup(){
               firstName: !state.firstName ? "First Name is required" : null,
               lastName: !state.lastName ? "Last Name is required" : null,
               phoneNumber: !state.phoneNumber ? "Phone Number is required" : null,
-              phoneNumber: state.phoneNumber.length < 10 ? "Phone Number must be 10 digits" : null,
+              phoneNumberLength: state.phoneNumber.length < 10 ? "Phone Number must be 10 digits" : null,
               email: !state.email ? "Email is required" : null,
               password: !state.password ? "Password is required" : null,
             });
             return; 
           }
-
         axios.post("/api/signup", state)
-        .then((response) => {console.log("Success", response)
-        router.push("/home")})
+        
+        .then((response) => {console.log("Success", response);
+        signIn("Credentials",{callbackUrl:"/home"})
+        
+        })
         .catch((error) => {console.log("Error", error);
         });
     }
@@ -60,29 +65,29 @@ export default function Signup(){
             <Link href={'/'}>Go Back </Link>
         </div>
         <div>
+            {error.firstName && <p>{error.firstName}</p>}
+            {error.lastName && <p>{error.lastName}</p>}
+            {error.phoneNumber && <p>{error.phoneNumber}</p>}
+            {error.email && <p>{error.email}</p>}
+            {error.password && <p>{error.password}</p>}
             <form onSubmit={handleSubmit}>
                 <div>
-                {error.firstName && <p>{error.firstName}</p>}
                     <label htmlFor="firstName">First Name</label>
                     <input type="text" name="firstName" placeholder="First Name" value={state.firstName} onChange={inputHandler}/>
                 </div>
                 <div>
-                {error.lastName && <p>{error.lastName}</p>}
                     <label htmlFor="lastName">Last Name</label>
                     <input type="text" name="lastName" placeholder="Last Name" value={state.lastName} onChange={inputHandler}/>
                 </div>
                 <div>
-                {error.phoneNumber && <p>{error.phoneNumber}</p>}
                     <label htmlFor="phoneNumber">Phone Number</label>
                     <input type="text" name="phoneNumber" placeholder="Phone Number" value={state.phoneNumber} onChange={inputNumberHandler}/>
                 </div>
                 <div>
-                {error.email && <p>{error.email}</p>}
                     <label htmlFor="email">Email</label>
                     <input type="email" name="email" placeholder="Email" value={state.email} onChange={inputHandler}/>
                 </div>
                 <div>
-                {error.password && <p>{error.password}</p>}
                     <label htmlFor="password">Password</label>
                     <input type="password" name="password" placeholder="Password" value={state.password} onChange={inputHandler}/>
                 </div>

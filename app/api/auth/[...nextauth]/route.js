@@ -2,37 +2,51 @@ import clientPromise from "@/lib/mongodb";
 import NextAuth from "next-auth";
 import CredentialsProvider  from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import { mongooseConnect } from "@/lib/mongoose";
+import { User } from "@/models/user.model";
+import bcrypt from "bcrypt";
 
 
 const handler =  NextAuth({
+  session: {
+    strategy: "jwt",
+  },
+  // pages: {
+  //   signIn: "/login",
+  // },
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: {  label: "Password", type: "password" },
       },
+      
       async authorize(credentials) {
-        await mongoClient.connect();
-
-        const db = mongoClient.db(clientPromise); 
-        const collection = db.collection("users");
-
-        const user = await collection.findOne({ email: credentials.email });
-
-        if (user && (await compare(credentials.password, user.password))) {
-          return Promise.resolve(user);
-        } else {
-          return Promise.resolve(null);
+        // await mongoClient.connect();
+        console.log("its running")
+        const {email, password} = credentials;
+        try {
+          await mongooseConnect();
+          const user = await User.findOne({ email }).select('+password')
+          if(!user){
+            return null;
+          }
+          const passwordsMatch = await bcrypt.compare(password, user.password);
+          if(!passwordsMatch){
+            return null;
+          } console.log(user); return user;
+        } catch (error) {
+          console.log(error);
         }
+        // const db = mongoClient.db(clientPromise); 
+        // const collection = db.collection("users");
       },
     }),
   ],
   adapter: MongoDBAdapter(clientPromise),
 
-  session: {
-    jwt: true, 
-  },
+  
   callbacks: {
     async jwt(token, user) {
       if (user) {
@@ -40,10 +54,10 @@ const handler =  NextAuth({
       }
       return token;
     },
-    async session(session, token) {
-      session.user = token;
+    session({ session, token }) {
+      session.user.id = token.id;
       return session;
-    },
+    }
   },
 });
 
