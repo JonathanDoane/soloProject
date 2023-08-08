@@ -2,14 +2,13 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useEffect } from "react";
 import { data } from "autoprefixer";
+import { useState, useEffect } from "react";
 
 export default  function Home() {
     const {data:session} = useSession();
     const user = session?.user;
     const router = useRouter();
-    console.log("client side:", session);
 
     useEffect(() => {
         if(!data){
@@ -21,7 +20,7 @@ export default  function Home() {
 return(
     <div>
         <div>
-            <h1>Welcome {user?.name}, {user?.email}</h1>
+            <h1>Welcome {user?.name}</h1>
             <Link href={'/extras'}>Extras</Link> |
             <button onClick={()=> signOut({
                 callbackUrl: "/",

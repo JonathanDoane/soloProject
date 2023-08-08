@@ -39,8 +39,8 @@ export default function Signup(){
             setError({
               firstName: !state.firstName ? "First Name is required" : null,
               lastName: !state.lastName ? "Last Name is required" : null,
-              phoneNumber: !state.phoneNumber ? "Phone Number is required" : null,
-              phoneNumberLength: state.phoneNumber.length < 10 ? "Phone Number must be 10 digits" : null,
+            //   phoneNumber: !state.phoneNumber ? "Phone Number is required" : null,
+              phoneNumber: state.phoneNumber.length < 10 ? "Phone Number must be 10 digits" : null,
               email: !state.email ? "Email is required" : null,
               password: !state.password ? "Password is required" : null,
             });

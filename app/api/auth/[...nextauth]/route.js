@@ -26,7 +26,7 @@ const handler =  NextAuth({
         // await mongoClient.connect();
         console.log("its running")
         const {email, password} = credentials;
-        console.log(email, password)
+        
         try {
           await mongooseConnect();
           const user = await User.findOne({ email }).select('+password')
@@ -55,8 +55,6 @@ const handler =  NextAuth({
   
   callbacks: {
     async jwt({token, user}) {
-      console.log("token:", token)
-      console.log("user:", user)
       if (user) {
         token.id = user._id;
       }
