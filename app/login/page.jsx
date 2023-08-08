@@ -18,19 +18,37 @@ export default function Login() {
         setState({...state, [e.target.name]: e.target.value})
     }
 
+    const callbackUrl = "/home";
+
     async function handleLogin(e){
         e.preventDefault();
         console.log("running");
-        const res = await signIn("Credentials", {
-            redirect: false,
-            email: state.email,
-            password: state.password,
-        });
-        if(!res.error){
-            router.push("/home");
-        }else {
-            setError("Invalid Credentials!")
+        try {
+            const res = await signIn("credentials", {
+                redirect: false,
+                email: state.email,
+                password: state.password,
+                callbackUrl,
+            });
+            console.log(res);
+            if(!res.error){
+                router.push(callbackUrl);
+            }else {
+                setError("Invalid Credentials!")
+            }  setState({ email: "", password: "" });
+        } catch (error) {
+            setError(error);
         }
+        // const res = await signIn("Credentials", {
+        //     redirect: false,
+        //     email: state.email,
+        //     password: state.password,
+        // });
+        // if(!res.error){
+        //     router.push("/home");
+        // }else {
+        //     setError("Invalid Credentials!")
+        // }
     }
 
     return (

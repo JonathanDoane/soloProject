@@ -11,9 +11,9 @@ const handler =  NextAuth({
   session: {
     strategy: "jwt",
   },
-  // pages: {
-  //   signIn: "/login",
-  // },
+  pages: {
+    signIn: "/login",
+  },
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -26,6 +26,7 @@ const handler =  NextAuth({
         // await mongoClient.connect();
         console.log("its running")
         const {email, password} = credentials;
+        console.log(email, password)
         try {
           await mongooseConnect();
           const user = await User.findOne({ email }).select('+password')
@@ -35,7 +36,12 @@ const handler =  NextAuth({
           const passwordsMatch = await bcrypt.compare(password, user.password);
           if(!passwordsMatch){
             return null;
-          } console.log(user); return user;
+          }
+          return {
+            id: user._id,
+            name: user.firstName,
+            email: user.email,
+          }
         } catch (error) {
           console.log(error);
         }
@@ -48,14 +54,17 @@ const handler =  NextAuth({
 
   
   callbacks: {
-    async jwt(token, user) {
+    async jwt({token, user}) {
+      console.log("token:", token)
+      console.log("user:", user)
       if (user) {
-        token.id = user.id;
+        token.id = user._id;
       }
+      // console.log(token.id)
       return token;
     },
     session({ session, token }) {
-      session.user.id = token.id;
+      session.user.id = token.sub;
       return session;
     }
   },

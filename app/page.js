@@ -1,10 +1,8 @@
 'use client'
-import Image from 'next/image'
+
 import Link from 'next/link'
-import { signIn } from 'next-auth/react'
-import { useSession } from 'next-auth/react'
 export default function Home() {
-  const {data: session, status} = useSession();
+
 
   return (
     <div> 
@@ -12,7 +10,7 @@ export default function Home() {
         <h1>Brother's Cleaning Co.</h1>
         <img src="/images/cleaningService.jpg" alt="Brother's Cleaning Co." width="400" height="400"/>
         <Link href={'/signup'}>Sign Up</Link> |
-        <button onClick={()=> signIn("Credentials",{callbackUrl:"/home"})}>Login</button>|
+        <Link href = {"/login"}> Login </Link>|
         <a> Extras</a> |
       </div>
       <div>
