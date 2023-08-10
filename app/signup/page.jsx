@@ -48,7 +48,7 @@ export default function Signup(){
           }
         axios.post("/api/signup", state)
         
-        .then((response) => {console.log("Success", response);
+        .then((response) => {console.log("Success", response.data);
         signIn("Credentials",{callbackUrl:"/home"})
         
         })
