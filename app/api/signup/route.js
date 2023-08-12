@@ -4,13 +4,13 @@ import { User } from "@/models/user.model";
 
 
 export async function POST(req, res) {
+  try {
     await mongooseConnect();
     const body = await req.json();
     console.log(body);
     const existingUser = await User.findOne({ email: body.email });
-    if(existingUser) {
-      console.log('User already exists')
-        
+    if (existingUser) {
+      return new Response(JSON.stringify({ error: "User already exists" }),{status: 500})
     }
       const newUser = await User.create({
         firstName: body.firstName,
@@ -20,6 +20,16 @@ export async function POST(req, res) {
         password: body.password,
     });
     return new Response(JSON.stringify(newUser))
+  } catch (error) {
+    console.error('Error creating user:', error);
+    if(error.code === 11000){
+      return new Response(JSON.stringify({ error: "User already exists" }),{status: 500})
+    }
+    return new Response(JSON.stringify({ error: error }), {
+      status: 500, // Internal Server Error status code
+    });
+  }
+    
     
     // const newUser = new User({
     //     firstName: body.firstName,

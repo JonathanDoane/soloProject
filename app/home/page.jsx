@@ -5,20 +5,24 @@ import Link from "next/link";
 import { data } from "autoprefixer";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { set } from "mongoose";
+
 
 export default  function Home() {
-    const {data:session} = useSession();
+    const {data:session, status} = useSession();
     const user = session?.user;
     const router = useRouter();
     const [userBookings, setUserBookings] = useState([]);
 
-    useEffect(() => {
-        if(!data){
-            router.push("/");
-        }
-    }, [data]);
 
+
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/login");
+        }
+    }, [status]);
+
+
+    
     useEffect(() => {
         axios.get("/api/bookcleaning")
         .then(response => {setUserBookings(response.data);console.log("Success", response.data)})
@@ -36,7 +40,7 @@ export default  function Home() {
 return(
     <div>
         <div>
-            <h1>Welcome {user?.name}</h1>
+            <h1 className="text-red-400">Welcome {user?.name}</h1>
             <Link href={'/extras'}>Extras</Link> |
             <button onClick={()=> signOut({
                 callbackUrl: "/",
@@ -44,7 +48,7 @@ return(
         </div>
         <h2>What would you like to do today?</h2>
         <div>
-            <Link href={'/bookcleaning'}>Book a Cleaning</Link>
+            <Link href={'/booking/bookcleaning'}>Book a Cleaning</Link>
             <Link href={'/rates'}>View Standard Rates</Link>
             <p>Promotional Text</p>
         </div>
@@ -55,9 +59,9 @@ return(
                     <div key={idx}>
                         <p>Date: {formatDate(booking.date)}</p>
                         <p>Arrival Time: {booking.time}</p>
-                        <p>Additional Notes: {booking.notes}</p>
+                        <p> <Link href = {`/booking/${booking._id}`}>View Booking Details</Link> </p>
                     </div>
-
+                    //start the details page? then be sure to include edit/update form, also make standard rate page
                 ))
             }
             

@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 
 export async function POST(req, res) {
     try {
-        await mongooseConnect(); // Assuming this function sets up the mongoose connection
+        await mongooseConnect();
         const body = await req.json();
 
         const newBooking = await Booking.create({
@@ -26,14 +26,41 @@ export async function POST(req, res) {
         });
     }
 }
+
+
+    export async function PUT(req, res) {
+        try {
+              await mongooseConnect(); 
+        const{searchParams} = new URL(req.url);
+        const bookingID = searchParams.get('id');
+        const body = await req.json();
+        const updatedBooking = await Booking.findByIdAndUpdate({_id: bookingID}, body, {new: true, runValidators: true});
+        return new Response(JSON.stringify(updatedBooking));
+        } catch (error) {
+            console.error('Error updating booking:', error);
+            return new Response(JSON.stringify({ error: error }), {
+                status: 500, // Internal Server Error status code
+            });
+        }
+      
+    }
+
+
     
 
     export async function GET(req, res) {
-        try {
+        const{searchParams} = new URL(req.url); 
+        const bookingID = searchParams.get('id');
+        await mongooseConnect(); 
+
+        if(bookingID){
+            const booking = await Booking.findById(bookingID);
+            return new Response(JSON.stringify(booking));   
+        }else {
+            try {
             const session = await getServerSession(authOptions);
 
             
-            await mongooseConnect(); // Assuming this function sets up the mongoose connection
             
             const bookings = await Booking.find({user: session?.user?.id});
             // console.log("GET bookings:", bookings);
@@ -44,4 +71,16 @@ export async function POST(req, res) {
                 status: 500, // Internal Server Error status code
             });
         }
+        }
+
+        
 }
+
+export async function DELETE(req, res) {
+    await mongooseConnect();
+    const{searchParams} = new URL(req.url);
+    const bookingID = searchParams.get('id');
+    const deletedBooking = await Booking.findByIdAndDelete(bookingID);
+    return new Response(JSON.stringify(deletedBooking));
+}
+

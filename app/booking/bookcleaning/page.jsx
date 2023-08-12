@@ -12,9 +12,15 @@ import axios from "axios";
 
 
 export default function BookCleaning() {
-    const {data:session} = useSession();
+    const {data:session, status} = useSession();
     const user = session?.user || null;
     const router = useRouter();
+
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/login");
+        }
+    }, [status]);
 
     const [state, setState] = useState({
         date: "",

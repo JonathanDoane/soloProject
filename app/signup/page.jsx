@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { signIn, useSession } from "next-auth/react"
 
 
-export default function Signup(){
+export default function Signup() {
     const { data: session } = useSession();
     const router = useRouter();
 
@@ -21,81 +21,86 @@ export default function Signup(){
     const [error, setError] = useState([]);
 
     const inputHandler = (e) => {
-        setState({...state, [e.target.name]: e.target.value})
+        setState({ ...state, [e.target.name]: e.target.value })
     }
 
     const inputNumberHandler = (e) => {
         let phoneNumber = e.target.value;
-        phoneNumber = phoneNumber.replace(/\D/g, ""); 
+        phoneNumber = phoneNumber.replace(/\D/g, "");
         phoneNumber = phoneNumber.substring(0, 10);
         setState({ ...state, phoneNumber });
         console.log(state.phoneNumber);
-      };
+    };
 
-    function handleSubmit(e){
+    function handleSubmit(e) {
         e.preventDefault();
-
-        if (!state.firstName || !state.lastName || !state.phoneNumber || !state.email || !state.password) {
-            setError({
-              firstName: !state.firstName ? "First Name is required" : null,
-              lastName: !state.lastName ? "Last Name is required" : null,
-            //   phoneNumber: !state.phoneNumber ? "Phone Number is required" : null,
-              phoneNumber: state.phoneNumber.length < 10 ? "Phone Number must be 10 digits" : null,
-              email: !state.email ? "Email is required" : null,
-              password: !state.password ? "Password is required" : null,
-            });
-            return; 
-          }
         axios.post("/api/signup", state)
-        
-        .then((response) => {console.log("Success", response.data);
-        signIn("Credentials",{callbackUrl:"/home"})
-        
-        })
-        .catch((error) => {console.log("Error", error);
-        });
+
+            .then((response) => {
+                console.log("Success", response.data);
+                signIn("Credentials", { callbackUrl: "/home" })
+
+            })
+            .catch((error) => {
+                console.log("Error", error);
+                const errors = error.response.data.error.errors;
+                const errorArray = [];
+                if (errors) {
+                    for (const key in errors) {
+                        errorArray.push(errors[key].message);
+                    }
+                } else {
+                    if (error.response.data.error === "User already exists") {
+                        errorArray.push("User already exists, please login");
+                    }
+                }
+                setError(errorArray);
+            });
     }
 
 
-    return(
-        <div>
-            <div>
-            <h1>Let's Create an Account</h1>
-            <Link href={'/extras'}>Extras </Link>
-            <Link href={'/'}>Go Back </Link>
-        </div>
-        <div>
-            {error.firstName && <p>{error.firstName}</p>}
-            {error.lastName && <p>{error.lastName}</p>}
-            {error.phoneNumber && <p>{error.phoneNumber}</p>}
-            {error.email && <p>{error.email}</p>}
-            {error.password && <p>{error.password}</p>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="firstName">First Name</label>
-                    <input type="text" name="firstName" placeholder="First Name" value={state.firstName} onChange={inputHandler}/>
+    return (
+        <body className="bg-blue-200">
+            <div className="text-center">
+                <div className="flex items-center justify-end w-5/6 m-auto gap-72" >
+                    <h1 className="text-5xl">Let's Create an Account</h1>
+                    <div>
+                        <Link href={'/extras'} className='hover:underline'>Extras </Link> |
+                        <Link href={'/'} className='hover:underline'> Go Back </Link>
+                    </div>
                 </div>
                 <div>
-                    <label htmlFor="lastName">Last Name</label>
-                    <input type="text" name="lastName" placeholder="Last Name" value={state.lastName} onChange={inputHandler}/>
-                </div>
-                <div>
-                    <label htmlFor="phoneNumber">Phone Number</label>
-                    <input type="text" name="phoneNumber" placeholder="Phone Number" value={state.phoneNumber} onChange={inputNumberHandler}/>
-                </div>
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input type="email" name="email" placeholder="Email" value={state.email} onChange={inputHandler}/>
-                </div>
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input type="password" name="password" placeholder="Password" value={state.password} onChange={inputHandler}/>
-                </div>
-                <button type="submit">Sign Up</button>
-            </form>
+                    {error && error.map((item, idx) => (
+                        <p key={idx}>{item}</p>
+                    ))}
+                    <form onSubmit={handleSubmit} className="border-2 border-black w-2/6 m-auto mt-10 bg-blue-300">
+                        <div className='mt-4'>
+                            <label htmlFor="firstName">First Name: </label>
+                            <input type="text" name="firstName" placeholder="First Name" value={state.firstName} onChange={inputHandler} className='border border-black' />
+                        </div>
+                        <div className='mt-4'>
+                            <label htmlFor="lastName">Last Name: </label>
+                            <input type="text" name="lastName" placeholder="Last Name" value={state.lastName} onChange={inputHandler} className='border border-black' />
+                        </div>
+                        <div className='mt-4'>
+                            <label htmlFor="phoneNumber">Phone Number: </label>
+                            <input type="text" name="phoneNumber" placeholder="Phone Number" value={state.phoneNumber} onChange={inputNumberHandler} className='border border-black' />
+                        </div>
+                        <div className='mt-4'>
+                            <label htmlFor="email">Email: </label>
+                            <input type="email" name="email" placeholder="Email" value={state.email} onChange={inputHandler} className='border border-black' />
+                        </div>
+                        <div className='mt-4'>
+                            <label htmlFor="password">Password: </label>
+                            <input type="password" name="password" placeholder="Password" value={state.password} onChange={inputHandler} className='border border-black' />
+                        </div>
+                        <button type="submit" className="bg-white text-black mt-5 mb-2 p-1 border border-black rounded-xl hover:bg-black hover:text-white duration-300">Sign Up</button>
+                    </form>
 
-        </div>
-        </div>
-        
+                </div>
+            </div>
+        </body>
+
+
     )
 }
