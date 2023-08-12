@@ -52,7 +52,8 @@ export default function Login() {
     }
 
     return (
-        <body className="bg-blue-200">
+       
+            <div className="bg-blue-200 h-screen">
             <div className="text-center">
                 <div className="flex items-center justify-end w-3/6 m-auto gap-72 mb-10">
                     <h1 className="text-5xl">Login</h1>
@@ -76,7 +77,9 @@ export default function Login() {
                     <button type="submit" className="bg-white text-black mt-5 mb-2 p-1 border border-black rounded-xl hover:bg-black hover:text-white duration-300">Login</button>
                 </form>
             </div>
-        </body>
+        </div>
+        
+        
 
     )
 }

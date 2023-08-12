@@ -1,12 +1,12 @@
 'use client'
 
 import Link from 'next/link'
+
 export default function Home() {
 
 
   return (
-    <html>
-      <body className="bg-blue-200">
+      <div className="bg-blue-200 max-h-max">
         <div className='p-1'> 
         <div className='flex items-center justify-between w-5/6 m-auto'>
           <div className='flex items-center'>
@@ -64,8 +64,6 @@ export default function Home() {
           
         </div>
       </div>
-      </body>
-    </html>
-    
+      </div>
   )
 }

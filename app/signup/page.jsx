@@ -60,7 +60,7 @@ export default function Signup() {
 
 
     return (
-        <body className="bg-blue-200">
+        <div className="bg-blue-200 h-max">
             <div className="text-center">
                 <div className="flex items-center justify-end w-5/6 m-auto gap-72" >
                     <h1 className="text-5xl">Let's Create an Account</h1>
@@ -99,7 +99,7 @@ export default function Signup() {
 
                 </div>
             </div>
-        </body>
+        </div>
 
 
     )
