@@ -68,11 +68,11 @@ export default function Login() {
                     )}
                     <div className='mt-4'>
                         <label htmlFor="email">Email: </label>
-                        <input className='border border-black' type="email" name="email" placeholder="Email" onChange={inputHandler} value={state.email} />
+                        <input className='border border-black p-1 rounded-md' type="email" name="email" placeholder="Email" onChange={inputHandler} value={state.email} />
                     </div>
                     <div className='mt-4'>
                         <label htmlFor="password">Password: </label>
-                        <input className='border border-black' type="password" name="password" placeholder="Password" onChange={inputHandler} value={state.password} />
+                        <input className='border border-black p-1 rounded-md' type="password" name="password" placeholder="Password" onChange={inputHandler} value={state.password} />
                     </div>
                     <button type="submit" className="bg-white text-black mt-5 mb-2 p-1 border border-black rounded-xl hover:bg-black hover:text-white duration-300">Login</button>
                 </form>
