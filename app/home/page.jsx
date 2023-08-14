@@ -25,7 +25,7 @@ export default function Home() {
 
     useEffect(() => {
         axios.get("/api/bookcleaning")
-            .then(response => { setUserBookings(response.data); console.log("Success", response.data) })
+            .then(response => { setUserBookings(response.data); })
             .catch((err) => console.log("error:", err));
     }, []);
 
@@ -73,7 +73,7 @@ export default function Home() {
                     </p>
                 </span>
             </div>
-            <div className="w-3/5 m-auto mt-5 bg-blue-400 p-3 h-screen rounded-xl">
+            <div className="w-3/5 m-auto mt-5 bg-blue-400 p-3  rounded-xl">
                 <p className="text-2xl mb-5">{user?.name}'s upcoming appointments:</p>
                 <div className="flex flex-wrap justify-center gap-2">
                     {

@@ -32,7 +32,7 @@ export default function DeleteBooking({ params }) {
         if (!id) {
             return
         } axios.get(`/api/bookcleaning?id=${id}`)
-            .then(response => { setState(response.data); console.log("Success", response.data) })
+            .then(response => { setState(response.data);})
             .catch(error => { console.log("Error", error) })
     }, []);
 

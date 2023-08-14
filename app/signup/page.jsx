@@ -29,7 +29,6 @@ export default function Signup() {
         phoneNumber = phoneNumber.replace(/\D/g, "");
         phoneNumber = phoneNumber.substring(0, 10);
         setState({ ...state, phoneNumber });
-        console.log(state.phoneNumber);
     };
 
     function handleSubmit(e) {
@@ -37,7 +36,6 @@ export default function Signup() {
         axios.post("/api/signup", state)
 
             .then((response) => {
-                console.log("Success", response.data);
                 signIn("Credentials", { callbackUrl: "/home" })
 
             })
@@ -62,7 +60,7 @@ export default function Signup() {
     return (
         <div className="bg-blue-200 h-max">
             <div className="text-center">
-                <div className="flex items-center justify-end w-5/6 m-auto gap-72" >
+                <div className="flex items-center justify-end w-4/6 m-auto gap-72" >
                     <h1 className="text-5xl">Let's Create an Account</h1>
                     <div>
                         <Link href={'/extras'} className='hover:underline'>Extras </Link> |
@@ -70,10 +68,10 @@ export default function Signup() {
                     </div>
                 </div>
                 <div>
-                    {error && error.map((item, idx) => (
-                        <p key={idx}>{item}</p>
-                    ))}
                     <form onSubmit={handleSubmit} className="border-2 border-black w-2/6 m-auto mt-10 bg-blue-300">
+                        {error && error.map((item, idx) => (
+                            <p key={idx} className="text-red-500 font-bold">{item}</p>
+                        ))}
                         <div className='mt-4'>
                             <label htmlFor="firstName">First Name: </label>
                             <input type="text" name="firstName" placeholder="First Name" value={state.firstName} onChange={inputHandler} className='border border-black' />

@@ -6,7 +6,7 @@ export default function Home() {
 
 
   return (
-      <div className="bg-blue-200 max-h-max">
+      <div className="bg-blue-200 min-h-screen" style={{height:"100vh"}}>
         <div className='p-1'> 
         <div className='flex items-center justify-between w-5/6 m-auto'>
           <div className='flex items-center'>

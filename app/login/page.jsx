@@ -22,7 +22,6 @@ export default function Login() {
 
     async function handleLogin(e) {
         e.preventDefault();
-        console.log("running");
         try {
             const res = await signIn("credentials", {
                 redirect: false,
@@ -30,7 +29,6 @@ export default function Login() {
                 password: state.password,
                 callbackUrl,
             });
-            console.log(res);
             if (!res.error) {
                 router.push(callbackUrl);
             } else {
@@ -39,16 +37,6 @@ export default function Login() {
         } catch (error) {
             setError(error);
         }
-        // const res = await signIn("Credentials", {
-        //     redirect: false,
-        //     email: state.email,
-        //     password: state.password,
-        // });
-        // if(!res.error){
-        //     router.push("/home");
-        // }else {
-        //     setError("Invalid Credentials!")
-        // }
     }
 
     return (
@@ -62,7 +50,7 @@ export default function Login() {
 
                 <form onSubmit={handleLogin} className="border-2 border-black w-2/6 m-auto mt-10 bg-blue-300">
                     {error && (
-                        <p>
+                        <p className="text-red-500 font-bold">
                             {error}
                         </p>
                     )}

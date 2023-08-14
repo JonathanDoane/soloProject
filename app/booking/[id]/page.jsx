@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 export default function ViewBookDetails({ params }) {
     const { data: session, status } = useSession();
     const user = session?.user || null;
-    console.log("user", user);
     const { id } = params;
     const router = useRouter();
 
@@ -24,7 +23,7 @@ export default function ViewBookDetails({ params }) {
 
     useEffect(() => {
         axios.get(`/api/bookcleaning?id=${id}`)
-            .then(response => { setBooking(response.data); console.log("Success", response.data) })
+            .then(response => { setBooking(response.data); })
             .catch((err) => console.log("error:", err));
     }, []);
 
