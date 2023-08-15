@@ -8,6 +8,12 @@ export async function POST(req, res) {
     try {
         await mongooseConnect();
         const body = await req.json();
+        console.log("body:", body);
+
+        const existingBooking = await Booking.find({
+            user: body.user,
+        }); 
+        console.log("existingBooking:", existingBooking);
 
         const newBooking = await Booking.create({
             date: body.date,

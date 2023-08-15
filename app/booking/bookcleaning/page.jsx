@@ -109,8 +109,7 @@ export default function BookCleaning() {
                             </div>
                             <div className="mb-5 border-b-2 border-black pb-1">
                                 <label htmlFor="time">Please select a Time:</label>
-                                <select onChange={inputHandler}>
-                                    <option value="" disabled selected>Select Time</option>
+                                <select onChange={inputHandler} className="rounded-md flex">
                                     <option value="9:30 AM" name="time">9:30 AM</option>
                                     <option value="10:30 AM" name="time">10:30 AM</option>
                                     <option value="11:30 AM" name="time">11:30 AM</option>

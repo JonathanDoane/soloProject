@@ -52,7 +52,7 @@ export default function Rates() {
                             from the Gold package and more. We go above and beyond to deliver a spotless and pristine environment,
                             leaving no corner untouched.
                         </p>
-                        <p>Key Features: "Celing-to-Floor" Cleaning, wall washing, grout & tile scrubbing. </p>
+                        <p>Key Features: "Ceiling-to-Floor" Cleaning, wall washing, grout & tile scrubbing. </p>
                     </div>
                 </div>
 
